@@ -1,12 +1,16 @@
 from flask import Flask, render_template, redirect, url_for, request, session
 from functools import wraps
+<<<<<<< HEAD
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
+=======
+>>>>>>> c29a76c7e0fb4f27c38d93193685b5d82f2c43db
 
 app = Flask(__name__)
 app.secret_key = 'clave_secreta_segura_massalium'
 
+<<<<<<< HEAD
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 # Crear carpeta para subir imágenes si no existe
@@ -18,6 +22,8 @@ pacientes = []
 citas = []
 terapeutas = ["Klaudia", "Alicia", "Pedro", "Diego"]
 
+=======
+>>>>>>> c29a76c7e0fb4f27c38d93193685b5d82f2c43db
 def login_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -26,7 +32,9 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated
 
+<<<<<<< HEAD
 @app.route("/pacientes", methods=["GET", "POST"])
+@login_required
 def pacientes_view():
     if request.method == "POST":
         datos = request.form
@@ -65,6 +73,11 @@ def pacientes_view():
         return redirect(url_for("pacientes_view"))
 
     return render_template("pacientes.html", terapeutas=terapeutas, pacientes=pacientes)
+=======
+@app.route('/')
+def home():
+    return redirect(url_for('login'))
+>>>>>>> c29a76c7e0fb4f27c38d93193685b5d82f2c43db
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -85,11 +98,6 @@ def logout():
 @login_required
 def dashboard():
     return render_template('dashboard.html', section='Inicio')
-
-@app.route('/pacientes')
-@login_required
-def pacientes():
-    return render_template('pacientes.html', section='Pacientes')
 
 @app.route('/citas')
 @login_required
@@ -116,7 +124,12 @@ def membresias():
 def estadisticas():
     return render_template('estadisticas.html', section='Estadísticas')
 
+<<<<<<< HEAD
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
 
+=======
+if __name__ == '__main__':
+    app.run(debug=True)
+>>>>>>> c29a76c7e0fb4f27c38d93193685b5d82f2c43db
