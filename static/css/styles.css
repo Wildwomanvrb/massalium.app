@@ -1,0 +1,6 @@
+body { background-color: #111; color: white; font-family: Arial; margin: 0; padding: 0; }
+nav { background-color: #000; display: flex; justify-content: space-around; padding: 1em; }
+nav a { color: gold; text-decoration: none; font-weight: bold; }
+.login-container { max-width: 300px; margin: 5em auto; background-color: #222; padding: 2em; border-radius: 8px; }
+.login-container input, .login-container button { width: 100%; padding: 0.5em; margin: 0.5em 0; }
+.error { color: red; }
