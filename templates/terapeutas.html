@@ -1,4 +1,207 @@
-{% extends 'layout.html' %}
+{% extends "layout.html" %}
 {% block content %}
-<p>Contenido en construcción...</p>
+<h1 class="titulo">Gestión de Terapeutas</h1>
+
+<style>
+    .terapeuta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .tarjeta-terapeuta {
+        background: #111;
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
+        text-align: center;
+        color: #fff;
+    }
+
+    .tarjeta-terapeuta img {
+        width: 100%;
+        max-width: 160px;
+        height: auto;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        object-fit: cover;
+        border: 2px solid #FFD700;
+    }
+
+    .tarjeta-terapeuta a {
+        display: inline-block;
+        margin: 5px;
+        color: #FFD700;
+        text-decoration: none;
+    }
+
+    .tarjeta-terapeuta a:hover {
+        text-decoration: underline;
+    }
+
+    .form-container {
+        background: #111;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
+        max-width: 600px;
+        margin: auto;
+        color: #fff;
+    }
+
+    .form-container h2 {
+        color: #FFD700;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+
+    .form-container label {
+        display: block;
+        margin-top: 1rem;
+        color: #FFD700;
+    }
+
+    .form-container input {
+        width: 100%;
+        padding: 0.7rem;
+        margin-top: 0.5rem;
+        background-color: #222;
+        border: none;
+        border-radius: 6px;
+        color: #fff;
+    }
+
+    .form-container button {
+        margin-top: 1.5rem;
+        width: 100%;
+        background-color: #FFD700;
+        color: #000;
+        font-weight: bold;
+        padding: 0.8rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .form-container button:hover {
+        background-color: #e6c200;
+    }
+
+    hr {
+        border: 0;
+        height: 1px;
+        background-color: #444;
+        margin: 3rem auto;
+        max-width: 700px;
+    }
+
+    .tabla-historial {
+        width: 100%;
+        font-size: 0.85rem;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    .tabla-historial th, .tabla-historial td {
+        border: 1px solid #333;
+        padding: 6px;
+        text-align: center;
+    }
+
+    .tabla-historial th {
+        background-color: #222;
+        color: #FFD700;
+        cursor: pointer;
+    }
+
+    .tabla-historial tr:nth-child(even) {
+        background-color: #1a1a1a;
+    }
+</style>
+
+<div class="form-container">
+    <h2>Nuevo Terapeuta</h2>
+    <form method="post" enctype="multipart/form-data">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="especialidad">Especialidad</label>
+        <input type="text" id="especialidad" name="especialidad" required>
+
+        <label for="foto">Foto de Perfil</label>
+        <input type="file" id="foto" name="foto" accept="image/*">
+
+        <button type="submit">Agregar Terapeuta</button>
+    </form>
+</div>
+
+<hr>
+
+<div class="listado">
+    <h2>Listado de Terapeutas</h2>
+    {% if terapeutas %}
+    <div class="terapeuta-grid">
+        {% for t in terapeutas %}
+        <div class="tarjeta-terapeuta">
+            {% if t.foto %}
+                <img src="{{ url_for('static', filename='uploads/' ~ t.foto) }}" alt="Foto de {{ t.nombre }}">
+            {% else %}
+                <img src="{{ url_for('static', filename='img/avatar-default.png') }}" alt="Sin foto">
+            {% endif %}
+            <h3>{{ t.nombre }}</h3>
+            <p>{{ t.especialidad }}</p>
+            <a href="{{ url_for('editar_terapeuta', index=loop.index0) }}">✏️ Editar</a>
+            <a href="{{ url_for('eliminar_terapeuta', index=loop.index0) }}" onclick="return confirm('¿Seguro que deseas eliminar este terapeuta?')">🗑️ Eliminar</a>
+
+            {% if t.historial %}
+            <h4 style="margin-top:1rem; color:#FFD700;">Historial de Masajes</h4>
+            <table class="tabla-historial">
+                <thead>
+                    <tr>
+                        <th onclick="ordenarPorFecha(this)">Fecha</th>
+                        <th>Cliente</th>
+                        <th>Importe (€)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in t.historial|sort(attribute='fecha', reverse=true) %}
+                    <tr>
+                        <td>{{ h.fecha }}</td>
+                        <td>{{ h.nombre }}</td>
+                        <td>{{ h.importe }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <p style="margin-top: 1rem;">Sin registros aún.</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="text-align: center;">No hay terapeutas registrados aún.</p>
+    {% endif %}
+</div>
+
+<script>
+function ordenarPorFecha(th) {
+    const table = th.closest('table');
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'))
+        .filter(row => row.querySelectorAll('td').length === 3);
+
+    const asc = th.dataset.sort !== 'asc';
+    th.dataset.sort = asc ? 'asc' : 'desc';
+
+    rows.sort((a, b) => {
+        const fechaA = new Date(a.children[0].textContent);
+        const fechaB = new Date(b.children[0].textContent);
+        return asc ? fechaA - fechaB : fechaB - fechaA;
+    });
+
+    rows.forEach(row => tbody.appendChild(row));
+}
+</script>
 {% endblock %}
