@@ -1,4 +1,13 @@
-{% extends 'layout.html' %}
+{% extends "layout.html" %}
 {% block content %}
-<p>Contenido en construcción...</p>
+<h1 class="titulo">Planes de Membresía</h1>
+<div class="grid">
+  {% for plan in planes %}
+    <div class="card">
+      <h2>{{ plan.nombre }}</h2>
+      <p>{{ plan.descripcion }}</p>
+      <p><strong>{{ plan.precio }}</strong></p>
+    </div>
+  {% endfor %}
+</div>
 {% endblock %}
