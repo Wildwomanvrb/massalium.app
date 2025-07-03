@@ -1,24 +1,73 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Massalium | {{ section }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0d0d0d;
+            color: #fff;
+            display: flex;
+        }
+        .sidebar {
+            width: 230px;
+            background-color: #111;
+            height: 100vh;
+            padding: 20px 0;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-right: 2px solid #ffd700;
+        }
+        .sidebar img {
+            height: 60px;
+            margin-bottom: 20px;
+        }
+        .sidebar h1 {
+            color: #ffd700;
+            font-size: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .sidebar a {
+            color: #ffd700;
+            text-decoration: none;
+            margin: 10px 0;
+            font-weight: bold;
+            font-size: 16px;
+            width: 100%;
+            text-align: center;
+            padding: 8px 0;
+        }
+        .sidebar a:hover {
+            background-color: #222;
+        }
+        main {
+            margin-left: 230px;
+            padding: 40px;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <nav>
+    <div class="sidebar">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Massalium">
+        <h1>Massalium</h1>
         <a href="{{ url_for('dashboard') }}">Inicio</a>
-        <a href="{{ url_for('pacientes') }}">Pacientes</a>
-        <a href="{{ url_for('citas') }}">Citas</a>
+        <a href="{{ url_for('pacientes_view') }}">Pacientes</a>
+        <a href="{{ url_for('citas_view') }}">Citas</a>
         <a href="{{ url_for('historial') }}">Historial</a>
-        <a href="{{ url_for('terapeutas') }}">Terapeutas</a>
+        <a href="{{ url_for('terapeutas_view') }}">Terapeutas</a>
         <a href="{{ url_for('membresias') }}">Membresías</a>
         <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
         <a href="{{ url_for('logout') }}">Salir</a>
-    </nav>
+    </div>
     <main>
-        <h1>{{ section }}</h1>
         {% block content %}{% endblock %}
     </main>
 </body>
