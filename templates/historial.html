@@ -1,4 +1,81 @@
-{% extends 'layout.html' %}
+{% extends "layout.html" %}
 {% block content %}
-<p>Contenido en construcción...</p>
+<h1 class="titulo">Historial de Pacientes</h1>
+
+<style>
+    .buscador-filtros {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .buscador-filtros input {
+        padding: 10px;
+        border-radius: 6px;
+        border: none;
+        background-color: #222;
+        color: #fff;
+        flex: 1;
+        min-width: 200px;
+    }
+    .historial-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+    .cita-card {
+        background: #111;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        color: #fff;
+        position: relative;
+    }
+    .cita-card h3 {
+        color: #ffd700;
+        margin-bottom: 5px;
+    }
+    .cita-card p {
+        margin: 5px 0;
+        font-size: 14px;
+    }
+    .acciones {
+        margin-top: 10px;
+    }
+    .acciones a {
+        margin-right: 10px;
+        color: #ffd700;
+        text-decoration: none;
+    }
+    .acciones a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="buscador-filtros">
+    <form method="get">
+        <input type="text" name="fecha" placeholder="Filtrar por fecha (YYYY-MM-DD)" value="{{ request.args.get('fecha', '') }}">
+        <input type="number" name="importe" step="0.01" placeholder="Importe mínimo" value="{{ request.args.get('importe', '') }}">
+        <button type="submit">Filtrar</button>
+    </form>
+</div>
+
+<div class="historial-grid">
+    {% for cita in citas %}
+    <div class="cita-card">
+        <h3>{{ cita.paciente }}</h3>
+        <p><strong>Terapeuta:</strong> {{ cita.terapeuta }}</p>
+        <p><strong>Fecha:</strong> {{ cita.fecha }}</p>
+        <p><strong>Importe:</strong> {{ cita.importe }} €</p>
+        {% if cita.imagen %}
+        <p><strong>Imagen:</strong><br><img src="{{ url_for('static', filename='uploads/' ~ cita.imagen) }}" width="100%" style="margin-top: 5px; border-radius: 8px;"></p>
+        {% endif %}
+        <div class="acciones">
+            <a href="{{ url_for('editar_cita', index=loop.index0) }}">✏️ Editar</a>
+            <a href="{{ url_for('eliminar_cita', index=loop.index0) }}" onclick="return confirm('¿Eliminar esta cita?')">🗑️ Eliminar</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}
