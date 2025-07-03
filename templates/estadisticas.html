@@ -1,4 +1,18 @@
-{% extends 'layout.html' %}
+{% extends "layout.html" %}
 {% block content %}
-<p>Contenido en construcción...</p>
+<h1 class="titulo">Estadísticas Generales</h1>
+<div class="stats-container">
+  <div class="stat-box">
+    <h2>{{ total_pacientes }}</h2>
+    <p>Pacientes registrados</p>
+  </div>
+  <div class="stat-box">
+    <h2>{{ total_citas }}</h2>
+    <p>Citas realizadas</p>
+  </div>
+  <div class="stat-box">
+    <h2>{{ ingresos_totales }}€</h2>
+    <p>Ingresos totales</p>
+  </div>
+</div>
 {% endblock %}
