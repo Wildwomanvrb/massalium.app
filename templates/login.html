@@ -1,18 +1,61 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Login | Massalium</title>
+    <title>Massalium | Acceso</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-box {
+            background-color: #111;
+            padding: 40px;
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #ffd70055;
+            width: 300px;
+        }
+        .login-box h2 {
+            color: #ffd700;
+            text-align: center;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #222;
+            border: 1px solid #444;
+            color: #fff;
+        }
+        .login-box button {
+            width: 100%;
+            padding: 10px;
+            background-color: #ffd700;
+            color: #000;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <div class="login-container">
-        <h1>Iniciar sesión</h1>
+    <div class="login-box">
+        <h2>Massalium</h2>
         {% if error %}
             <p class="error">{{ error }}</p>
         {% endif %}
-        <form method="POST">
+        <form method="post">
             <input type="text" name="username" placeholder="Usuario" required>
             <input type="password" name="password" placeholder="Contraseña" required>
             <button type="submit">Entrar</button>
