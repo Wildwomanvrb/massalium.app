@@ -1,4 +1,75 @@
 {% extends 'layout.html' %}
 {% block content %}
-<p>Contenido en construcción...</p>
+
+<div id="dashboard-container">
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Massalium Logo" class="logo-inicio">
+
+    <h1 class="titulo">Bienvenida a Massalium</h1>
+
+    <div id="reloj-container">
+        <div id="hora"></div>
+        <div id="fecha"></div>
+        <div id="frase">Más que masaje, un estilo de vida</div>
+    </div>
+</div>
+
+<style>
+    #dashboard-container {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    .logo-inicio {
+        max-width: 180px;
+        margin-bottom: 1.5rem;
+    }
+
+    #reloj-container {
+        background-color: #111;
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    #hora {
+        font-size: 48px;
+        font-weight: bold;
+        color: #FFD700;
+    }
+
+    #fecha {
+        font-size: 20px;
+        margin-top: 10px;
+        color: #ccc;
+    }
+
+    #frase {
+        margin-top: 15px;
+        font-size: 16px;
+        color: #FFD700;
+        font-style: italic;
+    }
+</style>
+
+<script>
+    function actualizarReloj() {
+        const ahora = new Date();
+        const hora = ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const fecha = ahora.toLocaleDateString('es-ES', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        document.getElementById("hora").textContent = hora;
+        document.getElementById("fecha").textContent = fecha.charAt(0).toUpperCase() + fecha.slice(1);
+    }
+
+    setInterval(actualizarReloj, 1000);
+    actualizarReloj();
+</script>
+
 {% endblock %}
